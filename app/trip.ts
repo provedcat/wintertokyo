@@ -30,12 +30,12 @@ export const trips:Trip[]=[
         "title": "인천 → 나리타",
         "label": "항공 · 인천→나리타",
         "place": "Narita International Airport",
-        "detail": "인천→나리타 Jeju Air 7C 1187 항공사 참조 번호: H8762V|H8762V / 입국·수하물 여유 확보 · 11:05 도착",
+        "detail": "인천→나리타 Jeju Air 7C 1187 / 입국·수하물 여유 확보 · 11:05 도착",
         "kind": "flight",
         "sourceRow": 7
       },
       {
-        "time": "11:00",
+        "time": "11:05",
         "end": "13:00",
         "title": "입국 · 수하물 · 점심",
         "label": "도착 후 여유 · 공항",
@@ -46,11 +46,11 @@ export const trips:Trip[]=[
       },
       {
         "time": "13:00",
-        "end": "15:30",
+        "end": "14:30",
         "title": "나리타 → 츠쿠바",
         "label": "버스 · 나리타→츠쿠바",
         "place": "Tsukuba Center Bus Terminal",
-        "detail": "나리타→츠쿠바 · 공항버스·숙소 이동 · T3 13:00 / 놓치면 14:00, 16:20편 · 참고 시간표: T3 13:00 → 츠쿠바센터 14:05, T3 14:00 → 15:05. 15:30까지는 시트에 잡힌 이동 여유이며 15:30 택시 일정과 이어져요.",
+        "detail": "나리타→츠쿠바 · 공항버스·숙소 이동 · T3 13:00 / 놓치면 14:00, 16:20편 · 참고 시간표: T3 13:00 → 츠쿠바센터 14:05, T3 14:00 → 15:05. 14:30 택시 이동 전까지 버스 하차·대기 여유를 포함해요.",
         "kind": "bus",
         "sourceRow": 9,
         "url": "https://www.keiseibus.co.jp/express-bus/90123-2/",
@@ -139,7 +139,7 @@ export const trips:Trip[]=[
         "place": "Nippori Station",
         "detail": "츠쿠바→닛포리 · 도쿄 이동·주차 · 도로 정체 포함 약 2.5시간 계획 / 상황 따라 산책 축소",
         "kind": "drive",
-        "sourceRow": 15
+        "sourceRow": 15,
         "url": "https://parkinggod.jp/hourly/tokyo/ueno-okachimachi-asakusa/nippori-yanakaginza/",
         "link": "주차장 안내 열기"
       },
@@ -242,7 +242,7 @@ export const trips:Trip[]=[
         "sourceRow": 24,
         "url": "https://www.shibaparkhotel.com/",
         "link": "공식·안내 열기",
-        "event": true
+        "event": false
       }
     ],
     "points": [
@@ -296,7 +296,7 @@ export const trips:Trip[]=[
       }
     ],
     "notes": [
-      "마켓 입장은 최종 시간표의 17:00 기준. 참고정보의 16:30과 달라 티켓 확인이 필요해요.",
+      "마켓 17:00 입장 예정. 티켓 예약이 필요해요.",
       "12/10~11 호텔 1박. 이날 츠쿠바로 돌아가지 않아요."
     ]
   },
@@ -317,7 +317,7 @@ export const trips:Trip[]=[
         "sourceRow": 26,
         "url": "https://www.shibaparkhotel.com/facility/",
         "link": "공식·안내 열기",
-        "event": true
+        "event": false
       },
       {
         "time": "09:30",
@@ -381,7 +381,7 @@ export const trips:Trip[]=[
         "place": "Marunouchi Park Building",
         "detail": "호텔→마루노우치 · 마루노우치 파크인 · 금요일 저녁  주차·교통 버퍼 포함",
         "kind": "drive",
-        "sourceRow": 32
+        "sourceRow": 32,
         "url": "https://www.marunouchi.com/ko/information/parking/",
         "link": "주차장 안내 열기"
       },
@@ -644,19 +644,19 @@ export const trips:Trip[]=[
         "title": "나리타 출발",
         "label": "항공 · 귀국",
         "place": "Narita International Airport",
-        "detail": "Trinity Airways TW 246 항공사 참조 번호: T3PKK6 2시간55분 비행",
+        "detail": "Trinity Airways TW 246 2시간55분 비행",
         "kind": "flight",
-        "event": true
+        "event": false
       },
       {
         "time": "21:50",
         "end": "22:10",
         "title": "인천공항 도착",
-        "label": "도착 시각 확인 필요",
+        "label": "도착 · 입국 · 수하물",
         "place": "Incheon International Airport",
         "detail": "도착 후 입국 심사·수하물 수령. 아빠 만나기",
         "kind": "stay",
-        "event": true
+        "event": false
       }
     ],
     "points": [
@@ -686,7 +686,7 @@ export const trips:Trip[]=[
       }
     ],
     "notes": [
-      "교회 실제 예배 시간·항공편 터미널·인천 도착 시각 확인이 필요해요."
+      "교회 실제 예배 시간을 확인해주세요. 귀국편은 나리타 18:55 출발, 인천 21:50 도착 계획이에요."
     ]
   }
 ];

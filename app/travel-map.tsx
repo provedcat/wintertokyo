@@ -1,5 +1,6 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
+import {backendOrigin,isGitHubPages} from './client-config';
 import {routeSegments,pointForStop} from './route-data';
 import type {RoutePoint} from './trip';
 type Position={lat:number;lng:number};
@@ -28,7 +29,7 @@ function loadMaps(){
   });
  })();return loading;
 }
-export default function TravelMap({points:routePoints,active,overview,onSelect}:{points:RoutePoint[];active:number;overview:boolean;onSelect:(index:number)=>void}){
+function GoogleTravelMap({points:routePoints,active,overview,onSelect}:{points:RoutePoint[];active:number;overview:boolean;onSelect:(index:number)=>void}){
  const host=useRef<HTMLDivElement>(null),handles=useRef<{map:MapHandle;api:MapsAPI;pins:HTMLElement[];lines:Line[]}|null>(null),select=useRef(onSelect);
  select.current=onSelect;
  const [ready,setReady]=useState(false),[error,setError]=useState(''),[scope,setScope]=useState<'all'|'japan'>('all');
@@ -49,3 +50,13 @@ export default function TravelMap({points:routePoints,active,overview,onSelect}:
  useEffect(()=>{const h=handles.current;if(!h||!overview)return;const bounds=new h.api.LatLngBounds();(scope==='all'?routePoints:routePoints.filter(p=>p.region==='JP')).forEach(p=>bounds.extend(p));h.map.fitBounds(bounds,42)},[overview,scope,ready]);
  return <div className={overview?'travel-map overview':'travel-map'}><div ref={host} className="google-map" aria-label="방문 순서가 연결된 Google 지도"/>{!ready&&!error&&<div className="map-loading" role="status">Google 지도를 불러오는 중…</div>}{error&&<div className="map-loading error" role="alert">{error}<a href={'https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(routePoints[0].name)} target="_blank" rel="noreferrer">Google 지도 앱에서 보기 ↗</a></div>}{overview&&routePoints.some(p=>p.region==='KR')&&<div className="map-controls"><button aria-pressed={scope==='all'} onClick={()=>setScope('all')}>전체 이동</button><button aria-pressed={scope==='japan'} onClick={()=>setScope('japan')}>일본 구간 확대</button></div>}</div>
 }
+
+type MapProps={points:RoutePoint[];active:number;overview:boolean;onSelect:(index:number)=>void};
+function HostedMap(props:MapProps){
+ const frame=useRef<HTMLIFrameElement>(null),latest=useRef(props);latest.current=props;
+ const send=()=>frame.current?.contentWindow?.postMessage({type:'winter-map-state',points:props.points,active:props.active,overview:props.overview},backendOrigin);
+ useEffect(()=>{send()},[props.points,props.active,props.overview]);
+ useEffect(()=>{function receive(e:MessageEvent){if(e.origin!==backendOrigin||e.source!==frame.current?.contentWindow||e.data?.type!=='winter-map-select')return;const stop=e.data.stop;if(Number.isInteger(stop)&&latest.current.points.some(p=>p.stop===stop))latest.current.onSelect(stop)}window.addEventListener('message',receive);return()=>window.removeEventListener('message',receive)},[]);
+ return <iframe ref={frame} className={props.overview?'hosted-map overview':'hosted-map'} title="여행 동선 지도" src={backendOrigin+'/map-view'} onLoad={send} allow="fullscreen"/>;
+}
+export default function TravelMap(props:MapProps){return isGitHubPages()?<HostedMap {...props}/>:<GoogleTravelMap {...props}/>}

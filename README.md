@@ -21,3 +21,9 @@ Use the Sites helper to install dependencies, then `npm run dev`. Schema is in `
 Run `node --experimental-strip-types checks.mjs` and `python checks_db.py` for duration and concurrent-edit checks. Actual Google map rendering, mobile downloads, and cross-device interaction need browser/device verification.
 
 Typography uses self-hosted Spoqa Han Sans Neo (400, 500, 700); see `public/fonts/OFL.txt`. Mobile schedule headings are 22px, descriptions 15px, and split-line start times 32px. Duration bars remain proportional; short cards have extra reading space, and gaps without events are shown separately.
+
+## GitHub Pages
+
+The static frontend builds with `pnpm exec vite build --config vite.pages.config.ts` and publishes through `.github/workflows/pages.yml`. Enable Settings → Pages → Source: GitHub Actions once, then run the Publish travel website workflow. Subsequent main-branch commits build and deploy automatically.
+
+The public Sites backend keeps the shared packing list and hosts the map iframe, so the existing domain-restricted Maps browser key works without placing the key in GitHub. The Pages frontend passes current route points to the map and receives marker selections through origin-checked messages. Backend changes need a separate Sites deployment; schedule and wording changes in the frontend publish through GitHub Actions.

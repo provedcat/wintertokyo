@@ -1,13 +1,14 @@
+import {allowedOrigin,withCors,preflight} from '../cors';
 import { and, eq } from 'drizzle-orm';
 import { getDb } from '../../../db';
 import { packing } from '../../../db/schema';
 const owners = ['공용', '리미', '티고', '요니'];
-export async function GET() {
+async function getItems(_request:Request) {
   try { return Response.json(await getDb().select().from(packing), {headers:{'Cache-Control':'no-store'}}); }
   catch { return Response.json({error:'공동 목록을 불러오지 못했어요.'}, {status:503}); }
 }
-export async function POST(request: Request) {
-  if (request.headers.get('origin') !== new URL(request.url).origin) return new Response(null,{status:403});
+async function addItem(request: Request) {
+  if (!allowedOrigin(request)) return new Response(null,{status:403});
   if (Number(request.headers.get('content-length')) > 2048) return new Response(null,{status:413});
   try {
     const body = await request.json() as Record<string, unknown>;
@@ -18,8 +19,8 @@ export async function POST(request: Request) {
     return Response.json(item,{status:201});
   } catch { return Response.json({error:'저장하지 못했어요. 연결을 확인해주세요.'},{status:503}); }
 }
-export async function PATCH(request: Request) {
-  if (request.headers.get('origin') !== new URL(request.url).origin) return new Response(null,{status:403});
+async function updateItem(request: Request) {
+  if (!allowedOrigin(request)) return new Response(null,{status:403});
   try {
     const b = await request.json() as Record<string, unknown>;
     if (!b || typeof b !== 'object') return new Response(null,{status:400});
@@ -33,3 +34,8 @@ export async function PATCH(request: Request) {
     return item ? Response.json(item) : Response.json({error:'다른 사람이 수정했어요. 새 목록을 확인해주세요.'},{status:409});
   } catch { return Response.json({error:'변경하지 못했어요. 연결을 확인해주세요.'},{status:503}); }
 }
+
+export const GET=(request:Request)=>withCors(request,getItems);
+export const POST=(request:Request)=>withCors(request,addItem);
+export const PATCH=(request:Request)=>withCors(request,updateItem);
+export const OPTIONS=preflight;

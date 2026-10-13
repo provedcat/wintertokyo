@@ -10,3 +10,5 @@
 
 /* Keep the itinerary visible while retaining access to every day. */
 header{background:rgba(255,250,247,.96)}header .brand{max-height:80px;overflow:hidden;opacity:1;transition:max-height .18s ease,opacity .18s ease}header.compact{padding:8px 16px}header.compact .brand{max-height:0;opacity:0;pointer-events:none}header.compact .days button{display:flex;align-items:center;justify-content:center;gap:5px;padding:9px 4px;min-height:44px;font-size:13px}header.compact .days strong{display:inline;font-size:18px;margin:0}.sticky-map{position:static}@media(prefers-reduced-motion:reduce){header .brand{transition:none}}
+
+.route-sticky-map{position:sticky;top:calc(var(--header-height,160px) + 8px);z-index:10}.route-sticky-map .travel-map.overview{height:clamp(160px,calc(100dvh - 330px),320px)}

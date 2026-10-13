@@ -1,17 +1,22 @@
 import assert from 'node:assert/strict';
-import {stops,duration,minutes} from './app/trip.ts';
-assert.equal(duration(stops[2]),65);
-for(let i=0;i<stops.length;i++){
- assert.ok(duration(stops[i])>0);
- if(i)assert.equal(minutes(stops[i-1].end),minutes(stops[i].time));
+import {trips,duration,minutes} from './app/trip.ts';
+import {routeSegments,pointForStop} from './app/route-data.ts';
+assert.equal(trips.length,5);
+assert.equal(trips[0].stops[0].time,'05:36');
+assert.equal(trips[1].stops.find(s=>s.sourceRow===23).time,'17:00');
+assert.ok(!JSON.stringify(trips[2]).includes('하얏트'));
+assert.equal(trips[4].stops.at(-1).time,'');
+assert.equal(trips[4].stops.at(-2).time,'19:00');
+for(const trip of trips){
+ for(const [i,s] of trip.stops.entries()){
+  if(s.time)assert.match(s.time,/^\d{2}:\d{2}$/);
+  if(s.end&&s.time)assert.ok(minutes(s.end)>=minutes(s.time));
+  assert.ok(duration(s)>=0);
+  if(i&&s.time&&trip.stops[i-1].end)assert.ok(minutes(s.time)>=minutes(trip.stops[i-1].end));
+ }
+ assert.equal(routeSegments(trip.points).length,trip.points.length-1);
+ for(const p of trip.points){assert.ok(p.stop>=0&&p.stop<trip.stops.length);assert.ok(p.lat>=-90&&p.lat<=90&&p.lng>=-180&&p.lng<=180)}
+ for(let i=0;i<trip.stops.length;i++){const p=pointForStop(i,trip.points);assert.ok(p>=0&&p<trip.points.length)}
 }
-assert.equal(stops.reduce((n,s)=>n+duration(s),0),660);
-assert.equal(duration(stops[0])*1.6/(duration(stops[1])*1.6),1.25);
-assert.ok(!JSON.stringify(stops).includes('Palcious'));
-console.log('Timeline continuity, proportional durations, and private-address exclusion passed.');
-const {routePoints,routeSegments,pointForStop}=await import('./app/route-data.ts');
-assert.equal(routePoints.length,3);
-assert.deepEqual(routeSegments().map(s=>s.kind),['flight','bus']);
-assert.deepEqual([0,1,2,3,4,5].map(pointForStop),[0,1,2,2,2,2]);
-for(const p of routePoints){assert.ok(p.lat>=-90&&p.lat<=90&&p.lng>=-180&&p.lng<=180)}
-console.log('Route ordering, transport styles, and timeline marker mapping passed.');
+assert.ok(!JSON.stringify(trips).includes('Palcious'));
+console.log('Five-day timetable ordering, map associations, reservation conflict, and unknown arrival checks passed.');

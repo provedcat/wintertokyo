@@ -332,14 +332,14 @@ export const trips:Trip[]=[
       {
         "time": "10:00",
         "end": "11:00",
-        "title": "GLITCH GINZA 커피",
+        "title": "긴자 모닝 커피",
         "label": "도보 · 긴자",
-        "place": "GLITCH COFFEE GINZA",
-        "detail": "긴자 · Glitch GINZA · 모닝 커피",
+        "place": "GLITCH COFFEE GINZA, 토리코로루トリコロール本店",
+        "detail": "드립커피는 GLITCH COFFEE GINZA, 고전적인 일본식 카페는 토리코로루トリコロール本店",
         "kind": "walk",
         "sourceRow": 28,
         "url": "https://tabelog.com/tokyo/A1301/A130101/13283362/",
-        "link": "공식·안내 열기"
+        "link": "타베로그 열기"
       },
       {
         "time": "11:00",
@@ -420,7 +420,7 @@ export const trips:Trip[]=[
         "region": "JP"
       },
       {
-        "name": "긴자",
+        "name": "히가사긴자역",
         "lat": 35.6694,
         "lng": 139.767,
         "stop": 2,
